@@ -11,15 +11,15 @@ operatorDisplay.textContent = " "
 
 
 function add() {
-    return Number(answerValue) + Number(inputValue);
+    return Math.floor((Number(answerValue) + Number(inputValue) * 100)) / 100;
 }
 
 function subtract() {
-    return Number(answerValue) - Number(inputValue)
+    return Math.floor((Number(answerValue) - Number(inputValue) * 100)) / 100;
 }
 
 function multiply() {
-    return Number(answerValue) * Number(inputValue)
+    return Math.floor((Number(answerValue) * Number(inputValue)  * 100)) / 100;
 }
 
 function divide() {
@@ -70,13 +70,26 @@ function isDecimal() {
 
 function numberInput(newValue) {
     let processedInput = inputValue.toString().split(""); //turns current input display value into an array
-    if (inputValue == 0) { //if the readout is currently "0", gets rid of it
-        processedInput.pop();
-    }
-    processedInput.push(newValue); //adds new number to end of array
-    processedInput = processedInput.join(""); //turns array back into a string
-    inputValue = processedInput;
 
+    if (newValue == ".") { //checks if number is a decimal and doesn't allow more decimals if so.
+        for (let i = 0; i < processedInput.length; i++) {
+            if (processedInput[i] == ".") {
+               return; 
+            }
+        }
+    }
+
+    if (inputValue == 0) { //if the readout is currently "0", gets rid of it
+        processedInput.shift();
+    }
+
+    processedInput.push(newValue); //adds new number to end of array
+    
+    if (processedInput[0] == ".") { //checks if number is a decimal without a ones place and adds a 0 at the beginning
+        processedInput.unshift("0");
+    };
+    // console.log(processedInput);
+    inputValue = processedInput.join(""); //turns array back into a string
     update();
 }
 
@@ -117,6 +130,18 @@ function clear() {
 }
 
 function update() {
+    let processedAnswer = answerValue.toString().split("");
+    for (let i = 0; i < processedAnswer.length; i++) {
+        if (processedAnswer[i] == ".") {
+            while (processedAnswer[processedAnswer.length-1] == "0") {
+                processedAnswer.pop();
+            }
+        }
+    };
+    while (processedAnswer[processedAnswer.length-1] == ".") {
+        processedAnswer.pop();
+    };
+    answerValue = processedAnswer.join("");
     answerDisplay.textContent = answerValue;
     inputDisplay.textContent = inputValue;
     operatorDisplayUpdate();
