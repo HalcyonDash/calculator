@@ -11,22 +11,22 @@ operatorDisplay.textContent = " "
 
 
 function add() {
-    return Math.floor((Number(answerValue) + Number(inputValue) * 100)) / 100;
+    return Number(answerValue) + Number(inputValue);
 }
 
 function subtract() {
-    return Math.floor((Number(answerValue) - Number(inputValue) * 100)) / 100;
+    return Number(answerValue) - Number(inputValue);
 }
 
 function multiply() {
-    return Math.floor((Number(answerValue) * Number(inputValue)  * 100)) / 100;
+    return Number(answerValue) * Number(inputValue);
 }
 
 function divide() {
     if (inputValue == 0) {
         return "Err";
     } else {
-        return (Math.floor((Number(answerValue) / Number(inputValue)) * 100)) / 100;
+        return Number(answerValue) / Number(inputValue);
     }
 }
 
@@ -48,6 +48,7 @@ function equals() {
             answerValue = inputValue == 0 ? answerValue : inputValue;
             break;
     }
+
     inputValue = 0;
 }
 
@@ -115,6 +116,11 @@ function otherInput(keyValue) {
         case "clear":
             clear();
             break;
+        case "negative":
+            inputValue *= -1;
+            update();
+            console.log(inputValue);
+            break;
         case "back":
             backspace();
             break;
@@ -142,6 +148,8 @@ function update() {
         processedAnswer.pop();
     };
     answerValue = processedAnswer.join("");
+    answerValue = Math.floor(answerValue * 100) / 100;
+
     answerDisplay.textContent = answerValue;
     inputDisplay.textContent = inputValue;
     operatorDisplayUpdate();
