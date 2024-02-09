@@ -1,9 +1,11 @@
 let answerValue = 0;
 let inputValue = 0;
 let currentOperation = "none";
+let negativePressed = false;
 
 const answerDisplay = document.querySelector("#answer-display");
 const inputDisplay = document.querySelector("#input-display");
+const negativeDisplay = document.querySelector("#negative-display");
 const operatorDisplay = document.querySelector("#operator-display");
 inputDisplay.textContent = inputValue;
 answerDisplay.textContent = answerValue;
@@ -65,10 +67,6 @@ function backspace() {
     update();
 }
 
-function isDecimal() {
-    return answerValue % 1 != 0;
-}
-
 function numberInput(newValue) {
     let processedInput = inputValue.toString().split(""); //turns current input display value into an array
 
@@ -89,8 +87,10 @@ function numberInput(newValue) {
     if (processedInput[0] == ".") { //checks if number is a decimal without a ones place and adds a 0 at the beginning
         processedInput.unshift("0");
     };
-    // console.log(processedInput);
+    
     inputValue = processedInput.join(""); //turns array back into a string
+    if (negativePressed) { inputValue *= -1};
+    negativePressed = false;
     update();
 }
 
@@ -117,9 +117,11 @@ function otherInput(keyValue) {
             clear();
             break;
         case "negative":
+            if (inputValue == 0) {
+                negativePressed = !negativePressed;
+            };
             inputValue *= -1;
             update();
-            console.log(inputValue);
             break;
         case "back":
             backspace();
@@ -152,6 +154,7 @@ function update() {
 
     answerDisplay.textContent = answerValue;
     inputDisplay.textContent = inputValue;
+    negativeDisplay.textContent = negativePressed ? "+/-" : "";
     operatorDisplayUpdate();
 }
 

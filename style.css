@@ -54,9 +54,22 @@ body {
     font-size: 64px;
 }
 
-#input-display {
+#bottom-display {
+    display: flex;
     height: 40%;
     font-size: 36px;
+}
+
+#negative-display {
+    align-self: center;
+    width: 10%;
+    font-size: 24px;
+    font-weight: bold;
+    color: darkgreen;
+}
+
+#input-display {
+    width: 90%;
 }
 
 #operator-display {
