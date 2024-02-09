@@ -1,6 +1,5 @@
 let answerValue = 0;
 let inputValue = 0;
-let newValue = 0;
 let currentOperation = "none";
 
 const answerDisplay = document.querySelector("#answer-display");
@@ -31,6 +30,27 @@ function divide() {
     }
 }
 
+function equals() {
+    switch (currentOperation) {
+        case "add":
+            answerValue = add();
+            break;
+        case "subtract":
+            answerValue = subtract();
+            break;
+        case "multiply":
+            answerValue = multiply();
+            break;
+        case "divide":
+            answerValue = divide();
+            break;
+        case "none":
+            answerValue = inputValue == 0 ? answerValue : inputValue;
+            break;
+    }
+    inputValue = 0;
+}
+
 function backspace() {
     if (inputValue == 0) { return; }; //skips if readout is zero
     let processedInput = inputValue.toString().split("");
@@ -41,7 +61,11 @@ function backspace() {
     processedInput = processedInput.join("");
     inputValue = processedInput;
 
-    update(answerValue, processedInput);
+    update();
+}
+
+function isDecimal() {
+    return answerValue % 1 != 0;
 }
 
 function numberInput(newValue) {
@@ -53,20 +77,48 @@ function numberInput(newValue) {
     processedInput = processedInput.join(""); //turns array back into a string
     inputValue = processedInput;
 
-    update(answerValue, processedInput);
+    update();
 }
 
 function operatorInput(keyValue) {
+    equals();
     switch (keyValue) {
         case "equals":
-            equals();
             currentOperation = "none";
             break;
         default:
             currentOperation = keyValue;
-            equals();
             break;
     }
+
+    // equals();
+    // currentOperation = keyValue == "equals" ? "none" : keyValue;
+    
+    update();
+}
+
+function otherInput(keyValue) {
+    switch (keyValue) {
+        case "clear":
+            clear();
+            break;
+        case "back":
+            backspace();
+            break;
+    }
+}
+
+function clear() {
+    answerValue = 0;
+    inputValue = 0;
+    currentOperation = "none";
+    update();
+    operatorDisplayUpdate();
+}
+
+function update() {
+    answerDisplay.textContent = answerValue;
+    inputDisplay.textContent = inputValue;
     operatorDisplayUpdate();
 }
 
@@ -88,55 +140,6 @@ function operatorDisplayUpdate() {
             operatorDisplay.textContent = "÷";
             break;
     }
-}
-
-function otherInput(keyValue) {
-    switch (keyValue) {
-        case "clear":
-            clear();
-            break;
-        case "back":
-            backspace();
-            break;
-    }
-}
-
-function equals() {
-    switch (currentOperation) {
-        case "add":
-            update(add(), 0);
-            break;
-        case "subtract":
-            update(subtract(), 0);
-            break;
-        // case "multiply":
-        //     update(multiply(), 0);
-        //     break;
-        // case "divide":
-        //     update(divide(), 0);
-        //     break;
-        case "none":
-            // update(answerValue, 0);
-            // inputValue = 0;
-            break;
-    }
-}
-
-function clear() {
-    answerValue = 0;
-    inputValue = 0;
-    newValue = 0;
-    currentOperation = "none";
-    update(answerValue, inputValue);
-    operatorDisplayUpdate();
-}
-
-function update(newAnswerValue, newInputValue) {
-    answerValue = newAnswerValue;
-    inputValue = newInputValue;
-    answerDisplay.textContent = newAnswerValue;
-    inputDisplay.textContent = newInputValue;
-    newValue = 0;
 }
 
 const numberKeys = document.querySelectorAll(".number");
