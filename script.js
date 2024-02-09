@@ -89,8 +89,12 @@ function numberInput(newValue) {
     };
     
     inputValue = processedInput.join(""); //turns array back into a string
-    if (negativePressed) { inputValue *= -1};
-    negativePressed = false;
+    
+    if (newValue != "."){
+        if (negativePressed) { inputValue *= -1};
+        negativePressed = false;
+    }
+    
     update();
 }
 
